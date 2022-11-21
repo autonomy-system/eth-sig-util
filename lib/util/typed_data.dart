@@ -96,6 +96,18 @@ class TypedDataUtil {
         chainId: chainId);
   }
 
+  static Uint8List typedData(TypedMessage typedData, String version) {
+    var parts = BytesBuffer();
+    parts.add(hex.decode('1901'));
+    parts.add(
+        hashStruct('EIP712Domain', typedData.domain, typedData.types, version));
+    if (typedData.primaryType != 'EIP712Domain') {
+      parts.add(hashStruct(
+          typedData.primaryType, typedData.message, typedData.types, version));
+    }
+    return parts.toBytes();
+  }
+
   static Uint8List hashTypedData(TypedMessage typedData, String version) {
     var parts = BytesBuffer();
     parts.add(hex.decode('1901'));
