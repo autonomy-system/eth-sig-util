@@ -96,6 +96,18 @@ class TypedDataUtil {
         chainId: chainId);
   }
 
+  static Uint8List typedDataV4({required String jsonData}) {
+    late final typedData;
+    try {
+      final rawTypedData = jsonDecode(jsonData);
+      typedData = TypedMessage.fromJson(rawTypedData);
+    } catch (_) {
+      throw ArgumentError(
+          'jsonData format is not corresponding to TypedMessage');
+    }
+    return TypedDataUtil.typedData(typedData, 'V4');
+  }
+
   static Uint8List typedData(TypedMessage typedData, String version) {
     var parts = BytesBuffer();
     parts.add(hex.decode('1901'));
